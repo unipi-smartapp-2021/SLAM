@@ -118,7 +118,7 @@ void PointCloudToLaserScanNodelet::connectCb()
   if (pub_.getNumSubscribers() > 0 && sub_.getSubscriber().getNumPublishers() == 0)
   {
     NODELET_INFO("Got a subscriber to scan, starting subscriber to pointcloud");
-    sub_.subscribe(nh_, "carla/ego_vehicle/lidar", input_queue_size_);
+    sub_.subscribe(nh_, "/carla/ego_vehicle/lidar", input_queue_size_);
   }
 }
 

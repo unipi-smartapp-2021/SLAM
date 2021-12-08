@@ -26,9 +26,10 @@ cd src
 git clone https://github.com/AndreaCensi/csm
 ```
 
-Overwrite the point_to_laserscan and the laser_scan_matcher.cpp files with ego_vehicle topics
+Overwrite the following files (modified the topic in the source code)
 ```
 mv pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
+mv sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
 mv laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
 ```
 
