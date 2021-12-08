@@ -10,10 +10,14 @@ class ConeMapper():
         self.cone_left = PoseArray()
         self.cone_right = PoseArray()
         self.current_pos = PoseStamped()
+
+        # subscribers
         self.sub_pose = rospy.Subscriber("/pose_stamped", PoseStamped, callback=self.pose_callback, queue_size=1)
         self.sub_cone = rospy.Subscriber("/model/lidar/output", Float32MultiArray, callback=self.cone_callback, queue_size=1)
-        self.pub_right = rospy.Publisher("/cone_right", PoseArray, latch=True)
-        self.pub_left = rospy.Publisher("/cone_left", PoseArray, latch=True)
+
+        # publishers
+        self.pub_right = rospy.Publisher("/cone_right", PoseArray, latch=True, queue_size=10)
+        self.pub_left = rospy.Publisher("/cone_left", PoseArray, latch=True, queue_size=10)
 
 
     def pose_callback(self, msg: PoseStamped):
@@ -28,30 +32,29 @@ class ConeMapper():
             y = msg.data[i+cone2idx["magnitude"]] * math.sin(msg.data[i+cone2idx["theta"]])
 
             cone_pos = Pose()
-            cone_pos.position.x = self.current_pos.pose.point.x + x
-            cone_pos.position.y = self.current_pos.pose.point.y + y
+            cone_pos.position.x = self.current_pos.pose.position.x + x
+            cone_pos.position.y = self.current_pos.pose.position.y + y
 
             # distribute cone on left or right
             if msg.data[i+cone2idx["theta"]] > 0:
                 self.cone_right.poses.append(cone_pos)
-            elif msg.data[i+cone2idx["theta"]] < 0:
+            else: 
                 self.cone_left.poses.append(cone_pos)
-            else:
-                print("other stuff")
 
 
 def main():
+    cone_mapper = ConeMapper()
     rospy.init_node("cone_mapping")
     print("Start node cone_mapping")
-
-    cone_mapper = ConeMapper()
     rate = rospy.Rate(5)
     while not rospy.is_shutdown():
         cone_mapper.pub_right.publish(cone_mapper.cone_right)
         cone_mapper.pub_left.publish(cone_mapper.cone_left)
         rate.sleep()
 
-    rospy.spin()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
