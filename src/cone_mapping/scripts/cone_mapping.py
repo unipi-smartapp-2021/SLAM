@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 import math
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, String
 from geometry_msgs.msg import PoseStamped, Pose2D, PoseArray, Pose
 
 
@@ -12,16 +12,16 @@ class ConeMapper():
         self.current_pos = PoseStamped()
 
         # subscribers
-        self.sub_pose = rospy.Subscriber("/pose_stamped", PoseStamped, callback=self.pose_callback, queue_size=1)
-        self.sub_cone = rospy.Subscriber("/model/lidar/output", Float32MultiArray, callback=self.cone_callback, queue_size=1)
+        self.sub_pose = rospy.Subscriber("/pose_stamped", PoseStamped, callback=self.pose_callback)
+        self.sub_cone = rospy.Subscriber("/model/lidar/output", Float32MultiArray, callback=self.cone_callback)
 
         # publishers
-        self.pub_right = rospy.Publisher("/cone_right", PoseArray, latch=True, queue_size=10)
-        self.pub_left = rospy.Publisher("/cone_left", PoseArray, latch=True, queue_size=10)
+        self.pub_right = rospy.Publisher("/cone_right", PoseArray, latch=True, queue_size=1)
+        self.pub_left = rospy.Publisher("/cone_left", PoseArray, latch=True, queue_size=1)
 
 
     def pose_callback(self, msg: PoseStamped):
-        self.current_pos = msg        
+        self.current_pos = msg
 
 
     def cone_callback(self, msg: Float32MultiArray):
@@ -35,6 +35,7 @@ class ConeMapper():
             cone_pos.position.x = self.current_pos.pose.position.x + x
             cone_pos.position.y = self.current_pos.pose.position.y + y
 
+            # TODO need to fix the distribution
             # distribute cone on left or right
             if msg.data[i+cone2idx["theta"]] > 0:
                 self.cone_right.poses.append(cone_pos)

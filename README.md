@@ -38,14 +38,20 @@ Try and pray that everything builds
 catkin_make
 ```
 
-## Testing
+## Example
 ```
 roscore
 rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node
+rosrun cone_mapping cone_mapping.py
 rosparam set use_sim_time true
-rosbag play <bag>
+
+# launch the bag, localization and set the simulation clock
+rosbag play <bag> --clock
 rosrun laser_scan_matcher laser_scan_matcher_node
+
+# print the output topics
 rostopic echo /pose_stamped
+rostopic echo /cone_right
 ```
 <!-- 
 ## slam-toolbox
