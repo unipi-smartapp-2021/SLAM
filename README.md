@@ -50,7 +50,7 @@ foo@bar:~$ rosparam set use_sim_time true
 Then launch the bag, localization and set the simulation clock:
 ```console
 foo@bar:~$ rosbag play <bag> --clock
-rfoo@bar:~$ osrun laser_scan_matcher laser_scan_matcher_node
+foo@bar:~$ rosrun laser_scan_matcher laser_scan_matcher_node
 ```
 Prints the output topics:
 ```console
