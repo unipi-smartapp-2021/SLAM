@@ -28,21 +28,21 @@ class ConeMapper():
         cone2idx = {"x": 0, "y": 1, "z": 2}
         thresh_noise = 3
 
+        # read each cone's position
         for i in range(0, len(msg.data), 3):
             x = msg.data[i+cone2idx["x"]]
             y = msg.data[i+cone2idx["y"]]
-
-            if x <= 0:
-                continue
 
             cone_pos = Pose()
             cone_pos.position.x = self.current_pos.pose.position.x + x
             cone_pos.position.y = self.current_pos.pose.position.y + y
 
+            # filter the object if it's too distant
             if cone_pos.position.x > self.current_pos.pose.position.x + thresh_noise or \
                cone_pos.position.x < self.current_pos.pose.position.x - thresh_noise or \
                cone_pos.position.y > self.current_pos.pose.position.y + thresh_noise or \
-               cone_pos.position.y < self.current_pos.pose.position.y - thresh_noise:
+               cone_pos.position.y < self.current_pos.pose.position.y - thresh_noise or \
+               x <= 0:
                 continue
 
             # distribute cone on left or right

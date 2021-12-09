@@ -1,7 +1,6 @@
 # SLAM
-SLAM implementation
+SLAM implementation by using localization module `laser_scan_matcher` and mapping the cones relative position using the absolute position `pose_stamped` outputted by `laser_scan_matcher`.
 
-## SLAM package
 <!-- 
 The slam toolbox package can be downloaded at the following link [here](https://github.com/SteveMacenski/slam_toolbox)
 
@@ -12,7 +11,7 @@ To cope with this, we transform the point cloud into laser scan using the provid
 The slam toolbox look for LaserScan messages on the topic specified in `slam_toolbox/config` in the param *scan_topic*.
  -->
 
-This is a brief guide on how to assembly the various components
+This is a brief guide on how to assembly the various components:
 ```
 git clone https://github.com/unipi-smartapp-2021/SLAM
 cd SLAM
@@ -39,6 +38,7 @@ catkin_make
 ```
 
 ## Example
+Follow the order to launch each line
 ```
 roscore
 rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node
@@ -52,9 +52,12 @@ rosrun laser_scan_matcher laser_scan_matcher_node
 # print the output topics
 rostopic echo /pose_stamped
 rostopic echo /cone_right
+rostopic echo /cone_left
 ```
 
-If you want to visualize the plotting of cones, create a bag of the topic `/cone_left` or `/cone_right`, then launch the `utils/visualize_cones.py`
+If you want to visualize the plotting of cones, create a bag recording the topic `/cone_left /cone_right /pose_stamped`, then launch the `utils/visualize_cones.py`. Example
+
+![](imgs/track.png)
 
 <!-- 
 ## slam-toolbox
