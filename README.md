@@ -62,9 +62,9 @@ If you want to plot the cones, you must create a bag recording the topic `/cone_
 ![](imgs/track.png)
 
 # TODO
-- [] Make launchfile 
-- [] Use directly Pointercloud instead of converting to Laserscan
-- [] Test on the simulator
+- [ ] Make launchfile 
+- [ ] Use directly Pointercloud instead of converting to Laserscan
+- [ ] Test on the simulator
 
 <!-- 
 ## slam-toolbox
