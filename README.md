@@ -14,50 +14,52 @@ The slam toolbox listens for `LaserScan` messages on the topic specified in `sla
  -->
 
 Hereby follows a concise guide on how to assembly the various components:
-```
-git clone https://github.com/unipi-smartapp-2021/SLAM
-cd SLAM
-git submodule update --init --recursive
-sudo apt-get install libgsl0-dev
+```console
+foo@bar:~$ git clone https://github.com/unipi-smartapp-2021/SLAM
+foo@bar:~$ cd SLAM
+foo@bar:~$ git submodule update --init --recursive
+foo@bar:~$ sudo apt-get install libgsl0-dev
 ```
 
 If `catkin_make` fails due to missing `csm` package, install it:
-```
-cd src
-git clone https://github.com/AndreaCensi/csm
+```console
+foo@bar:~$ cd src
+foo@bar:~$ git clone https://github.com/AndreaCensi/csm
 ```
 
-Overwrite the following files (modified the topic in the source code):
-```
-cp utils/pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
-cp utils/sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
-cp utils/laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
+Overwrite the following files:
+```console
+foo@bar:~$ cp utils/pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
+foo@bar:~$ cp utils/sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
+foo@bar:~$ cp utils/laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
 ```
 
 Try and pray that everything builds:
-```
-catkin_make
+```console
+foo@bar:~$ catkin_make
 ```
 
 ## Example
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
+```console
+foo@bar:~$ roscore
+foo@bar:~$ rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node
+foo@bar:~$ rosrun cone_mapping cone_mapping.py
+foo@bar:~$ rosparam set use_sim_time true
 ```
-roscore
-rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node
-rosrun cone_mapping cone_mapping.py
-rosparam set use_sim_time true
-
-# launch the bag, localization and set the simulation clock
-rosbag play <bag> --clock
-rosrun laser_scan_matcher laser_scan_matcher_node
-
-# print the output topics
-rostopic echo /pose_stamped
-rostopic echo /cone_right
-rostopic echo /cone_left
+Then launch the bag, localization and set the simulation clock:
+```console
+foo@bar:~$ rosbag play <bag> --clock
+rfoo@bar:~$ osrun laser_scan_matcher laser_scan_matcher_node
+```
+Prints the output topics:
+```console
+foo@bar:~$ rostopic echo /pose_stamped
+foo@bar:~$ rostopic echo /cone_right
+foo@bar:~$ rostopic echo /cone_left
 ```
 
-If you want to plot the cones, you must create a bag recording the topic `/cone_left /cone_right /pose_stamped` and then launch `utils/visualize_cones.py`. Example
+If you want to plot the cones, you must create a bag recording the topic `/cone_left /cone_right /pose_stamped` and then launch `utils/visualize_cones.py`. Example:
 
 ![](imgs/track.png)
 
