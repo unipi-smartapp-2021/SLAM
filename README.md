@@ -28,9 +28,9 @@ git clone https://github.com/AndreaCensi/csm
 
 Overwrite the following files (modified the topic in the source code)
 ```
-cp pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
-cp sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
-cp laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
+cp utils/pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
+cp utils/sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
+cp utils/laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
 ```
 
 Try and pray that everything builds
@@ -53,6 +53,9 @@ rosrun laser_scan_matcher laser_scan_matcher_node
 rostopic echo /pose_stamped
 rostopic echo /cone_right
 ```
+
+If you want to visualize the plotting of cones, create a bag of the topic `/cone_left` or `/cone_right`, then launch the `utils/visualize_cones.py`
+
 <!-- 
 ## slam-toolbox
 

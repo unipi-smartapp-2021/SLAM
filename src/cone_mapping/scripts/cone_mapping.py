@@ -47,7 +47,7 @@ def main():
     cone_mapper = ConeMapper()
     rospy.init_node("cone_mapping")
     print("Start node cone_mapping")
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(1)
     while not rospy.is_shutdown():
         cone_mapper.pub_right.publish(cone_mapper.cone_right)
         cone_mapper.pub_left.publish(cone_mapper.cone_left)
