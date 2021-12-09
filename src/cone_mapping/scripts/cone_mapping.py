@@ -25,21 +25,30 @@ class ConeMapper():
 
 
     def cone_callback(self, msg: Float32MultiArray):
-        cone2idx = {"theta": 0, "phi": 1, "magnitude": 2}
+        cone2idx = {"x": 0, "y": 1, "z": 2}
+        thresh_noise = 3
 
         for i in range(0, len(msg.data), 3):
-            x = msg.data[i+cone2idx["magnitude"]] * math.cos(msg.data[i+cone2idx["theta"]])
-            y = msg.data[i+cone2idx["magnitude"]] * math.sin(msg.data[i+cone2idx["theta"]])
+            x = msg.data[i+cone2idx["x"]]
+            y = msg.data[i+cone2idx["y"]]
+
+            if x <= 0:
+                continue
 
             cone_pos = Pose()
             cone_pos.position.x = self.current_pos.pose.position.x + x
             cone_pos.position.y = self.current_pos.pose.position.y + y
 
-            # TODO need to fix the distribution
+            if cone_pos.position.x > self.current_pos.pose.position.x + thresh_noise or \
+               cone_pos.position.x < self.current_pos.pose.position.x - thresh_noise or \
+               cone_pos.position.y > self.current_pos.pose.position.y + thresh_noise or \
+               cone_pos.position.y < self.current_pos.pose.position.y - thresh_noise:
+                continue
+
             # distribute cone on left or right
-            if msg.data[i+cone2idx["theta"]] > 0:
+            if y > 0:
                 self.cone_right.poses.append(cone_pos)
-            else: 
+            elif y < 0:
                 self.cone_left.poses.append(cone_pos)
 
 
