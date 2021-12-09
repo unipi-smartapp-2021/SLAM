@@ -47,7 +47,7 @@ class ConeMapper:
             cone = Pose()
             cone.position.x = self.position.pose.position.x + x
             cone.position.y = self.position.pose.position.y + y
-            self.cones[y < 0].append(cone)
+            self.cones[y < 0].poses.append(cone)
 
 
 def main():
