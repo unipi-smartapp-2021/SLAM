@@ -59,6 +59,11 @@ If you want to visualize the plotting of cones, create a bag recording the topic
 
 ![](imgs/track.png)
 
+# TODO
+- [] Make launchfile 
+- [] Use directly Pointercloud instead of converting to Laserscan
+- [] Test on the simulator
+
 <!-- 
 ## slam-toolbox
 
