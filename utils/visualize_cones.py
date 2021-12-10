@@ -3,8 +3,13 @@ import numpy as np
 import rosbag
 from geometry_msgs.msg import PoseArray, PoseStamped
 from std_msgs.msg import Float32MultiArray
+import sys
 
-bag = rosbag.Bag('l.bag')
+try:
+    bag = rosbag.Bag(sys.argv[1])
+except:
+    bag = rosbag.Bag('l.bag')
+
 # bag = rosbag.Bag('cone_right_pose.bag')
 conel_x, conel_y = [], []
 coner_x, coner_y = [], []

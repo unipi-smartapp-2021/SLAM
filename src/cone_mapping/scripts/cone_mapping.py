@@ -31,6 +31,39 @@ class ConeMapper:
     def pose_callback(self, msg: PoseStamped):
         self.position = msg
 
+    def insert_cone(self, cone, cone_list_index):
+        '''
+        This function apply tries to apply an identity function to the cone.
+        If the new cone is at distance d from an already discovered one, and d < distance_threshold,
+        the new cone is not inserted in the list of cones.
+        '''
+        # get the current cone list
+        cone_list = self.cones[cone_list_index]
+        # distace threshold
+        distance_threshold = 2
+        found = False
+
+        rospy.loginfo("Analying detected cone {}, {}".format(cone.position.x, cone.position.y))
+
+
+        # for each cone in the cone list
+        for idx, old_cone in enumerate(cone_list.poses):
+            # compute the distance between the new cone and the cone in the list
+            distance = math.dist([cone.position.x, cone.position.y], [old_cone.position.x, old_cone.position.y])
+            # if there is already a cone in the area of the new detected cone (its distance form the old cone is below the threshold)
+            # break the loop and do not insert the new cone in the cone list
+            if distance < distance_threshold:
+                rospy.loginfo("Alredy seen cone {}, {}".format(old_cone.position.x, old_cone.position.y))
+                found = True
+                break
+        
+        # if i cannot find any cone in the nearby of the new detected cone, insert the new cone in the cone list
+        if not found:
+            rospy.loginfo("New cone {}, {}".format(cone.position.x, cone.position.y))
+            cone_list.poses.append(cone)
+
+        return cone_list
+
     def cone_callback(self, msg: Float32MultiArray):
         axis2index = {"x": 0, "y": 1, "z": 2}
         noise_threshold = 3
@@ -47,8 +80,10 @@ class ConeMapper:
             cone = Pose()
             cone.position.x = self.position.pose.position.x + x
             cone.position.y = self.position.pose.position.y + y
-            self.cones[y < 0].poses.append(cone)
 
+            self.cones[y < 0] = self.insert_cone(cone, (y < 0))
+
+            #self.cones[y < 0].poses.append(cone)
 
 def main():
     rospy.init_node("cone_mapping")
