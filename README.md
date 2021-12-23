@@ -19,45 +19,31 @@ The slam toolbox listens for `LaserScan` messages on the topic specified in `sla
 Hereby follows a concise guide on how to assembly the various components:
 
 ```console
-
 foo@bar:~$ git clone https://github.com/unipi-smartapp-2021/SLAM
-
 foo@bar:~$ cd SLAM
-
 foo@bar:~$ git submodule update --init --recursive
-
 foo@bar:~$ sudo apt-get install libgsl0-dev
-
 ```
 
 If `catkin_make` fails due to missing `csm` package, install it:
 
 ```console
-
 foo@bar:~$ cd src
-
 foo@bar:~$ git clone https://github.com/AndreaCensi/csm
-
 ```
 
 Overwrite the following files:
 
 ```console
-
 foo@bar:~$ cp utils/pointcloud_to_laserscan_nodelet.cpp src/pointcloud_to_laserscan/src/pointcloud_to_laserscan_nodelet.cpp
-
 foo@bar:~$ cp utils/sample_node.launch src/pointcloud_to_laserscan/launch/sample_node.launch
-
 foo@bar:~$ cp utils/laser_scan_matcher.cpp src/scan_tools/laser_scan_matcher/src/laser_scan_matcher.cpp
-
 ```
 
 Try and pray that everything builds:
 
 ```console
-
 foo@bar:~$ catkin_make
-
 ```
 
 ## Run it
@@ -65,35 +51,23 @@ foo@bar:~$ catkin_make
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
 
 ```console
-
 foo@bar:~$ roscore
-
 foo@bar:~$ rosrun pointcloud_to_laserscan pointcloud_to_laserscan_node
-
 foo@bar:~$ rosrun cone_mapping cone_mapping.py
-
 foo@bar:~$ rosparam set use_sim_time true
-
 ```
 
 Then launch the bag, localization and set the simulation clock:
 ```console
-
 foo@bar:~$ rosbag play <bag> --clock
-
 foo@bar:~$ rosrun laser_scan_matcher laser_scan_matcher_node
-
 ```
 
 Prints the output topics:
 ```console
-
 foo@bar:~$ rostopic echo /pose_stamped
-
 foo@bar:~$ rostopic echo /cone_right
-
 foo@bar:~$ rostopic echo /cone_left
-
 ``` 
 
 ## Results
@@ -125,9 +99,7 @@ We also applied an avarage on the colors detected for a specific cone and the fi
 You can run the *cone_drawing* node to visualize at runtime the published cones. Just run
 
 ```console
-
 foo@bar:~$ rosrun cone_mapping cone_drawing.py
-
 ```
 before playing the rosbag.
   
@@ -136,7 +108,7 @@ before playing the rosbag.
 - [ ] Make launchfile
 - [ ] Use directly Pointercloud instead of converting to Laserscan
 - [ ] Test on the simulator
--  [X] Avaraging color detections
+- [X] Avaraging color detections
 - [ ] Avaraging points of detected cones
 
   
