@@ -105,7 +105,7 @@ If you want to plot the cones, you must create a bag recording the topic `/cone_
 
 After having cleaning up the noise points:
 
-![](imgs/track_2.png)
+![](imgs/track_2.jpg)
 
 In order to apply the identity function that allows us to remove noise points displayed in the figure above, we have just applied the following idea:
 
@@ -120,7 +120,7 @@ In the TODO list there also some other interesting possible improvements.
 
 We also applied an avarage on the colors detected for a specific cone and the final result is:
 
-![](imgs/track_3.png)
+![](imgs/track_3.jpg)
 
 You can run the *cone_drawing* node to visualize at runtime the published cones. Just run
 
