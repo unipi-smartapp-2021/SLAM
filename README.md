@@ -108,8 +108,8 @@ before playing the rosbag.
 - [ ] Make launchfile
 - [ ] Use directly Pointercloud instead of converting to Laserscan
 - [ ] Test on the simulator
-- [X] Avaraging color detections
-- [ ] Avaraging points of detected cones
+- [X] Averaging color detections
+- [ ] Averaging points of detected cones
 
   
 
