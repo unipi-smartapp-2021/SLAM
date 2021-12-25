@@ -77,7 +77,7 @@ If you want to plot the cones, you must create a bag recording the topic `/cone_
 
 ![](imgs/track.png)  
 
-After having cleaning up the noise points:
+After having cleaned up the noise points:
 
 ![](imgs/track_2.jpg)
 
@@ -88,11 +88,11 @@ the new cone is not inserted in the list of cones.
 
 However in this way, the position of the cone is never updated, but in real scenarios the first detection of the cone can be very noisy and must be updated during the run.
 
-So, we should apply some avaraging on the position of the cone here.
+So, we should apply some averaging on the position of the cone here.
 
 In the TODO list there also some other interesting possible improvements.  
 
-We also applied an avarage on the colors detected for a specific cone and the final result is:
+We also estimated the colors detected for a specific cone and the final result is:
 
 ![](imgs/track_3.jpg)
 
