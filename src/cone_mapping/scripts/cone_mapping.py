@@ -104,25 +104,27 @@ class ConeMapper:
 		If two colors have the same frequency in the array of cones, the last color detected is used
 		'''
 
-		colors = detected_cone['colors']
-		# create a set starting from the colors in the detected cones
-		set_colors = set(colors)
+        colors = detected_cone["colors"]
+        # create a set starting from the colors in the detected cones
+        set_colors = set(colors)
 
-		most_frequent_color = None
-		most_frequent_color_number = None
+        most_frequent_color = None
+        most_frequent_color_number = None
 
-		# for each color contained in the array find its frequency and see if it is the color with higher frequency
-		for color in set_colors:
-			if most_frequent_color is None or colors.count(color) >= most_frequent_color_number:
-				most_frequent_color = color
-				most_frequent_color_number = colors.count(color)
-		
-		return most_frequent_color
+        # for each color contained in the array find its frequency and see if it is the color with higher frequency
+        for color in set_colors:
+            if (
+                most_frequent_color is None
+                or colors.count(color) >= most_frequent_color_number
+            ):
+                most_frequent_color = color
+                most_frequent_color_number = colors.count(color)
 
+        return most_frequent_color
+      
+  def get_detected_cones(self):
 
-	def get_detected_cones(self):
-
-		'''
+    '''
 		Build the pose arrays of the detected cones with their color
 		The color of a given detected cone is computed by the function get_cone_color
 		'''
@@ -168,21 +170,21 @@ class ConeMapper:
 
 
 def main():
-	rospy.init_node("cone_mapping")
+    rospy.init_node("cone_mapping")
 
-	print("Start node cone_mapping")
-	cone_mapper = ConeMapper()
-	rate = rospy.Rate(5)
-	while not rospy.is_shutdown():
-		orange_cones, yellow_cones, blue_cones = cone_mapper.get_detected_cones()
-		cone_mapper.pub_left.publish(blue_cones)
-		cone_mapper.pub_right.publish(yellow_cones)
-		cone_mapper.pub_start.publish(orange_cones)
-		rate.sleep()
+    print("Start node cone_mapping")
+    cone_mapper = ConeMapper()
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
+        orange_cones, yellow_cones, blue_cones = cone_mapper.get_detected_cones()
+        cone_mapper.pub_left.publish(blue_cones)
+        cone_mapper.pub_right.publish(yellow_cones)
+        cone_mapper.pub_start.publish(orange_cones)
+        rate.sleep()
 
 
 if __name__ == "__main__":
-	try:
-		main()
-	except rospy.ROSInterruptException:
-		pass
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

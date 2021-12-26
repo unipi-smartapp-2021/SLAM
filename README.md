@@ -115,7 +115,6 @@ In the following animated GIF we show an example of the cones' positions that ar
 
 ![Positions Avaraging GIF](imgs/positions.gif)
 
-
 The *cone_mapping* algorithm also applies an **average over the colors** detected for a specific cone. This is due to the fact that a cone, especially during the first detections, can be mis-classified with the wrong color. The algorithm given a cone will paint the cone with the most frequent detected color for that cone.
 
 In the TODO list there also some other interesting possible improvements.  
