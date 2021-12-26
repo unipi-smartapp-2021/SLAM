@@ -64,6 +64,8 @@ The launch file will run the following nodes:
 - cone_mapping.py
 - cone_drawing.py
 
+### Manual execution
+
 If you are interested in **running individually** the nodes just apply the following instructions.
 
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
