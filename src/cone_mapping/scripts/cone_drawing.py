@@ -19,8 +19,8 @@ class Visualiser:
         self.orange_x, self.orange_y = [] , []
 
     def plot_init(self):
-        self.ax.set_xlim(0, 100)
-        self.ax.set_ylim(-10, 10)
+        self.ax.set_xlim(0, 50)
+        self.ax.set_ylim(-5, 5)
         return self.left_plot
     
     def left_cone_callback(self, msg):

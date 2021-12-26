@@ -14,7 +14,8 @@ class ConeMapper:
 		self.position = PoseStamped()
 
 		self.detected_cones = []
-		self.distance_threshold = 2
+		self.distance_threshold = 1.8
+		self.confidence_threshold = 2
 
 		# Subscribers
 		self.sub_pose = rospy.Subscriber(
@@ -88,11 +89,12 @@ class ConeMapper:
 			# if there is no detected cones in the nearby of this cone, insert the new cone in the detected cones data structure
 			if closer_cone is None:
 				rospy.loginfo("No close cones are found")
-				self.detected_cones.append({'x': cone_x, 'y': cone_y, 'colors': [color]})
+				self.detected_cones.append({'x': cone_x, 'y': cone_y, 'colors': [color], 'detections': [(cone_x, cone_y)]})
 			# otherwise append the color detected this time to the closer cone
 			else:
 				rospy.loginfo("Close cone detected: {}".format((closer_cone['x'], closer_cone['y'])))
 				self.detected_cones[cone_index]['colors'].append(color)
+				self.detected_cones[cone_index]['detections'].append((cone_x, cone_y))
 
 	def get_cone_color(self, detected_cone):
 		'''
@@ -131,10 +133,23 @@ class ConeMapper:
 
 		# for each cone in the detected cones data structure
 		for idx, detected_cone in enumerate(self.detected_cones):
+			# if the cone has been seen less then confidence threshold just ignore it
+			if len(detected_cone['detections']) < self.confidence_threshold:
+				rospy.loginfo("Cone {} below confidence threshold".format((detected_cone['x'], detected_cone['y'])))
+				continue
+			
+			# compute avg x and y
+			avg_x = sum([x for x,_ in detected_cone['detections']]) / len(detected_cone['detections'])
+			avg_y = sum([y for _,y in detected_cone['detections']]) / len(detected_cone['detections'])
+
+			# assign detected cone x and y as the average x and y over the detections
+			detected_cone['x'] = avg_x
+			detected_cone['y'] = avg_y
+
 			# find the most frequent color
 			detected_color = self.get_cone_color(detected_cone)
 			rospy.loginfo("Cone [{}] most frequent color: {}".format((detected_cone['x'], detected_cone['y']), detected_color))
-			
+
 			# create the cone (Pose object)
 			cone = Pose()
 			cone.position.x = detected_cone['x']
