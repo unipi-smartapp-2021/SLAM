@@ -103,32 +103,29 @@ class ConeMapper:
 		return the mode of the colors arrays.
 		If two colors have the same frequency in the array of cones, the last color detected is used
 		'''
+		colors = detected_cone["colors"]
+		# create a set starting from the colors in the detected cones
+		set_colors = set(colors)
 
-        colors = detected_cone["colors"]
-        # create a set starting from the colors in the detected cones
-        set_colors = set(colors)
+		most_frequent_color = None
+		most_frequent_color_number = None
 
-        most_frequent_color = None
-        most_frequent_color_number = None
+		# for each color contained in the array find its frequency and see if it is the color with higher frequency
+		for color in set_colors:
+			if (
+				most_frequent_color is None
+				or colors.count(color) >= most_frequent_color_number
+			):
+				most_frequent_color = color
+				most_frequent_color_number = colors.count(color)
 
-        # for each color contained in the array find its frequency and see if it is the color with higher frequency
-        for color in set_colors:
-            if (
-                most_frequent_color is None
-                or colors.count(color) >= most_frequent_color_number
-            ):
-                most_frequent_color = color
-                most_frequent_color_number = colors.count(color)
+		return most_frequent_color
 
-        return most_frequent_color
-      
-  def get_detected_cones(self):
-
-    '''
+	def get_detected_cones(self):
+		'''
 		Build the pose arrays of the detected cones with their color
 		The color of a given detected cone is computed by the function get_cone_color
 		'''
-
 		orange_cones = PoseArray()
 		yellow_cones = PoseArray()
 		blue_cones = PoseArray()
