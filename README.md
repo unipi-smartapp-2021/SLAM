@@ -48,6 +48,26 @@ foo@bar:~$ catkin_make
 
 ## Run it
 
+### Launch file
+You can run the implemented slam node by running the *slam.launch* launch file:
+```console
+foo@bar:~$ roslaunch cone_mapping slam.launch
+```
+In a different terminal play the desired rosbag:
+```console
+foo@bar:~$ rosbag play <bag> --clock
+```
+
+The launch file will run the following nodes:
+- pointcloud_to_laserscan_node
+- laser_scan_matcher_node
+- cone_mapping.py
+- cone_drawing.py
+
+### Manual execution
+
+If you are interested in **running individually** the nodes just do as follows.
+
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
 
 ```console
@@ -73,28 +93,33 @@ foo@bar:~$ rostopic echo /cone_left
 ## Results
   
 
-If you want to plot the cones, you must create a bag recording the topic `/cone_left /cone_right /pose_stamped` and then launch `utils/visualize_cones.py`. Example:
+If you want to plot the cones, you must create a bag recording the topic `/cone_left /cone_right /pose_stamped` and then launch `utils/visualize_cones.py` and passing to it the recorded bag file. Example:
 
 ![](imgs/track.png)  
 
-After having cleaned up the noise points:
+We decided to apply a identity function in order to clean up noisy points. The result is the following:
 
 ![](imgs/track_2.jpg)
 
-In order to apply the identity function that allows us to remove noise points displayed in the figure above, we have just applied the following idea:
+The identity function relies on the following assumption: a cone can be detected more than one time by the lidar but its absolute position will not vary too much. 
+So, we apply the following tranformation:
+if the new cone is at distance *d* from the closer cone *c* between the already discovered ones, and d < distance_threshold, the new cone is associated to *c* and thus, only *c* is returned in output by the algorithm.
 
-If the new cone is at distance d from an already discovered one, and d < distance_threshold,
-the new cone is not inserted in the list of cones.
+However in this way the position of the cone is never updated and tipically in real case scenarios the first detection of a cone is very noisy and must be updated during the run.
 
-However in this way, the position of the cone is never updated, but in real scenarios the first detection of the cone can be very noisy and must be updated during the run.
+So, we decided to apply a transformation of the cone's position by taking all the positions associated to a cone and averaging them. The new position will be the position which represent the cone and ideally it will be very close to the real absolute position of the cone.
 
-So, we should apply some averaging on the position of the cone here.
+We also applied a confidence threshold *c_r* which will discard all the cones that are detected less than *c_r* times. This should improve data quality by removing false detections.
+
+In the following animated GIF we show an example of the cones' positions that are updated during the simulation time. New detections for a specific cone cause a new adjusted position for that cone. Ideally, the more the detections the more the average position will lead to a position close to the reality. 
+
+![Positions Avaraging GIF](imgs/positions.gif)
+
+The *cone_mapping* algorithm also applies an **average over the colors** detected for a specific cone. This is due to the fact that a cone, especially during the first detections, can be mis-classified with the wrong color. The algorithm given a cone will paint the cone with the most frequent detected color for that cone.
 
 In the TODO list there also some other interesting possible improvements.  
 
-We also estimated the colors detected for a specific cone and the final result is:
-
-![](imgs/track_3.jpg)
+## Visualization
 
 You can run the *cone_drawing* node to visualize at runtime the published cones. Just run
 
@@ -102,14 +127,26 @@ You can run the *cone_drawing* node to visualize at runtime the published cones.
 foo@bar:~$ rosrun cone_mapping cone_drawing.py
 ```
 before playing the rosbag.
-  
+
+Otherwise you can run *visualize_cones.py <filename>* passing to it a bag file which contains the output of the slam topics  in order to visualize the final result of the slam. 
+
+Record the slam output:
+```console
+foo@bar:~$ rosbag record /pose_stamped /cone_orange /cone_right /cone_left
+```
+
+*visualize_cones.py* usage:
+```console
+foo@bar:~$ python utils/visualize_cones.py <output.bag>
+```
+
 # TODO
 
-- [ ] Make launchfile
-- [ ] Use directly Pointercloud instead of converting to Laserscan
+- [X] Make launchfile
+- [ ] Use directly Pointcloud instead of converting to Laserscan
 - [ ] Test on the simulator
 - [X] Averaging color detections
-- [ ] Averaging points of detected cones
+- [X] Averaging points of detected cones
 
   
 
