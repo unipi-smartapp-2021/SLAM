@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <rosparam file="$(find cone_mapping)/config/slam.yaml" />
+
+    <!-- run pointcloud_to_laserscan node -->
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+    </node>
+    <node pkg="cone_mapping" type="cone_mapping.py" name="cone_mapping">
+    </node>
+    <node pkg="cone_mapping" type="cone_drawing.py" name="cone_drawing">
+    </node>
+    <node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="laser_scan_matcher_node">
+    </node>
+
+
+</launch>

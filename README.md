@@ -48,6 +48,24 @@ foo@bar:~$ catkin_make
 
 ## Run it
 
+### Launch file
+You can now run the implemented slam node by running the *slam.launch* launch file:
+```console
+foo@bar:~$ roslaunch cone_mapping slam.launch
+```
+In a different terminal play the desired rosbag:
+```console
+foo@bar:~$ rosbag play <bag> --clock
+```
+
+The launch file will run the following nodes:
+- pointcloud_to_laserscan_node
+- laser_scan_matcher_node
+- cone_mapping.py
+- cone_drawing.py
+
+If you are interested in running individually the nodes just apply the following instructions.
+
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
 
 ```console
@@ -105,7 +123,7 @@ before playing the rosbag.
   
 # TODO
 
-- [ ] Make launchfile
+- [X] Make launchfile
 - [ ] Use directly Pointercloud instead of converting to Laserscan
 - [ ] Test on the simulator
 - [X] Averaging color detections
