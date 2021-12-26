@@ -52,10 +52,10 @@ class ConeMapper:
 			# compute the euclidean distance w.r.t. the given cone
 			distance = math.dist([cone_x, cone_y], [detected_cone['x'], detected_cone['y']])
 
-			# if the distance is below a threshold
-			if distance < self.distance_threshold:
-				# and it is less than the minimum distance detected until now
-				if min_distance is None or distance < min_distance:
+			 # if the distance is below a threshold and it is less than the minimum distance detected until now
+            if distance < self.distance_threshold and (
+                min_distance is None or distance < min_distance
+            ):
 					# save this detected cone as the closer one
 					min_distance = distance
 					min_index = idx
@@ -84,7 +84,7 @@ class ConeMapper:
 			color = int(msg.data[i + axis2index["c"]])
 
 			# compute the closer cone in the list of already detected cones
-			closer_cone, cone_index, distance = self.get_closer_cone(cone_x, cone_y)
+			closer_cone, cone_index, _ = self.get_closer_cone(cone_x, cone_y) # distance is never used
 
 			# if there is no detected cones in the nearby of this cone, insert the new cone in the detected cones data structure
 			if closer_cone is None:
@@ -131,7 +131,7 @@ class ConeMapper:
 		blue_cones = PoseArray()
 
 		# for each cone in the detected cones data structure
-		for idx, detected_cone in enumerate(self.detected_cones):
+		for detected_cone in self.detected_cones:
 			# if the cone has been seen less then confidence threshold just ignore it
 			if len(detected_cone['detections']) < self.confidence_threshold:
 				rospy.loginfo("Cone {} below confidence threshold".format((detected_cone['x'], detected_cone['y'])))

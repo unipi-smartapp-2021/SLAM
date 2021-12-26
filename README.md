@@ -49,7 +49,7 @@ foo@bar:~$ catkin_make
 ## Run it
 
 ### Launch file
-You can now run the implemented slam node by running the *slam.launch* launch file:
+You can run the implemented slam node by running the *slam.launch* launch file:
 ```console
 foo@bar:~$ roslaunch cone_mapping slam.launch
 ```
@@ -66,7 +66,7 @@ The launch file will run the following nodes:
 
 ### Manual execution
 
-If you are interested in **running individually** the nodes just apply the following instructions.
+If you are interested in **running individually** the nodes just do as follows.
 
 **Important** You should follow this exact same order in order to succesfully launch the SLAM:
 
@@ -101,9 +101,9 @@ We decided to apply a identity function in order to clean up noisy points. The r
 
 ![](imgs/track_2.jpg)
 
-The identity function relies on the following assumption: a cone can be detected more than one time by the lidar but its absolute position will not change too much. 
+The identity function relies on the following assumption: a cone can be detected more than one time by the lidar but its absolute position will not vary too much. 
 So, we apply the following tranformation:
-if the new cone is at distance d from the closer cone *c* between the already discovered ones, and d < distance_threshold, the new cone is associated to *c* and thus, only *c* is returned in output by the algorithm.
+if the new cone is at distance *d* from the closer cone *c* between the already discovered ones, and d < distance_threshold, the new cone is associated to *c* and thus, only *c* is returned in output by the algorithm.
 
 However in this way the position of the cone is never updated and tipically in real case scenarios the first detection of a cone is very noisy and must be updated during the run.
 
@@ -143,7 +143,7 @@ foo@bar:~$ python utils/visualize_cones.py <output.bag>
 # TODO
 
 - [X] Make launchfile
-- [ ] Use directly Pointercloud instead of converting to Laserscan
+- [ ] Use directly Pointcloud instead of converting to Laserscan
 - [ ] Test on the simulator
 - [X] Averaging color detections
 - [X] Averaging points of detected cones
