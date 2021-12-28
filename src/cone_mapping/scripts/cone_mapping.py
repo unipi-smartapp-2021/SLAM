@@ -53,13 +53,13 @@ class ConeMapper:
 			distance = math.dist([cone_x, cone_y], [detected_cone['x'], detected_cone['y']])
 
 			 # if the distance is below a threshold and it is less than the minimum distance detected until now
-            if distance < self.distance_threshold and (
-                min_distance is None or distance < min_distance
-            ):
-					# save this detected cone as the closer one
-					min_distance = distance
-					min_index = idx
-					closer_cone = detected_cone
+			if distance < self.distance_threshold and (
+				min_distance is None or distance < min_distance
+			):
+				# save this detected cone as the closer one
+				min_distance = distance
+				min_index = idx
+				closer_cone = detected_cone
 
 		return closer_cone, min_index, min_distance
 
