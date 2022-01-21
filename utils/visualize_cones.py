@@ -10,7 +10,6 @@ try:
 except:
     bag = rosbag.Bag('l_filtered.bag')
 
-# bag = rosbag.Bag('cone_right_pose.bag')
 conel_x, conel_y = [], []
 coner_x, coner_y = [], []
 coneo_x, coneo_y = [], []
