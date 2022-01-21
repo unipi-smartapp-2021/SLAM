@@ -132,14 +132,21 @@ class ConeMapper:
 
 		# for each cone in the detected cones data structure
 		for detected_cone in self.detected_cones:
+			# number of times such cone has been seen
+			cone_detections = len(detected_cone['detections'])
 			# if the cone has been seen less then confidence threshold just ignore it
-			if len(detected_cone['detections']) < self.confidence_threshold:
+			if cone_detections < self.confidence_threshold:
 				rospy.loginfo("Cone {} below confidence threshold".format((detected_cone['x'], detected_cone['y'])))
 				continue
 			
-			# compute avg x and y
-			avg_x = sum([x for x,_ in detected_cone['detections']]) / len(detected_cone['detections'])
-			avg_y = sum([y for _,y in detected_cone['detections']]) / len(detected_cone['detections'])
+			# compute avg x and avg y
+			sum_x, sum_y = 0, 0
+			for x, y in detected_cone['detections']:
+				sum_x += x
+				sum_y += y
+			
+			avg_x = sum_x / cone_detections
+			avg_y = sum_y / cone_detections
 
 			# assign detected cone x and y as the average x and y over the detections
 			detected_cone['x'] = avg_x
