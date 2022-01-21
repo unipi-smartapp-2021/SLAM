@@ -38,8 +38,6 @@ car_x.append(1)
 car_y.append(-5)
 car_y.append(5)
 
-# plt.plot(coner_x, [np.mean(conel_y) for _ in range(len(coner_y))])
-# plt.plot(coner_x, [np.mean(coner_y) for _ in range(len(coner_y))])
 plt.scatter(car_x, car_y, color='r')
 plt.scatter(conel_x, conel_y, color='b')
 plt.scatter(coner_x, coner_y, color='y')
